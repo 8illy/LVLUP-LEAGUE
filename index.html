@@ -1,0 +1,248 @@
+<script>
+
+	var results = [];
+	
+	if(window.location.hash) {
+		let array = window.location.hash.split(",");
+		let chunkSize = 11;
+		for (let i = 0; i < array.length; i += chunkSize) {
+			let chunk = array.slice(i, i + chunkSize);
+			results.push({
+				cardId : chunk[9],
+				subCardId : chunk[10],
+				name : chunk[1],
+			})
+		}
+	
+	}
+	
+	results = results.map(function(e,i,a){e.placing = i+1;return e});
+</script>
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<style>
+
+	body {
+		--main-bg-color: #c7500b;
+		--main-bg-color: #f1657e;
+		--main-bg-color: #305839;
+		--main-tx-color:white;
+
+		--lvlupred:#c02a35;
+	}
+	
+	#outerContainer{
+		background:url(https://i.imgur.com/CK72n1f.jpg);
+		background:url(https://images4.alphacoders.com/688/68856.jpg);
+		background:url(https://i.redd.it/r7u6tphn55281.png);
+		background:url(https://unblast.com/wp-content/uploads/2021/01/Space-Background-Images.jpg);
+		/*background:url(https://mrwallpaper.com/images/hd/wallpaper-valentines-day-hearts-lots-fly-love-m7tt0svylhvxbrvn.jpg);*/
+	}
+
+	.resultCard {
+		background: var(--main-bg-color);
+		position: relative;
+		width: 500px;
+		height: 500px;
+		margin:10px;
+		border-radius:3%;
+	}
+	
+	.resultPlacing {
+		font-size: 6em;
+		color: var(--main-tx-color);
+		font-family: fantasy;
+		position: absolute;
+		/*background: var(--main-bg-color);*/
+		width: 20%;
+		text-align: center;
+		text-shadow: 3px 3px black;
+	}
+	
+	#winnerContainer >.resultCard > .resultPlacing{
+		color:gold;
+	}
+	
+	#top4Container >.resultCard:nth-child(1) > .resultPlacing{
+		color:silver;
+	}
+	
+	#top4Container >.resultCard:nth-child(2) > .resultPlacing{
+		color:#CD7F32;
+	}
+	
+	
+	#top4Container .resultPlacing {
+		font-size: 4em;
+	}
+	
+	#top8Container .resultPlacing {
+		font-size: 3em;
+	}
+	
+	.resultName {
+		font-size: 3em;
+		color:  var(--main-tx-color);
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		background: var(--main-bg-color);
+		width: 100%;
+		text-align: center;
+		padding-bottom: 3%;
+		text-shadow: 2px 2px black;
+		border-radius: 0 0 30% 30%;
+		font-family: serif;
+		font-weight: 800;
+	}
+	
+	#top4Container .resultName {
+		font-size: 2em;
+	}
+	
+	#top8Container .resultName {
+		font-size: 1.5em;
+	}
+	
+	.resultName:before {
+		content: "";
+		width: 0;
+		height: 0;
+		border-left: 486px solid transparent;
+		border-right: 0px solid transparent;
+		border-bottom: 50px solid var(--main-bg-color);
+		top: -50px;
+		left:0px;
+		position: absolute;
+		
+	}
+	
+	#top4Container .resultName:before{
+		border-left: 330px solid transparent;
+		border-right: 0px solid transparent;
+		border-bottom: 33px solid var(--main-bg-color);
+		top: -33px;
+	}
+	
+	#top8Container .resultName:before{
+		border-left: 240px solid transparent;
+		border-right: 0px solid transparent;
+		border-bottom: 24px solid var(--main-bg-color);
+		top: -24px;
+	}
+	
+	.resultImg {
+		width: 92%;
+		margin: 4%;
+	}
+	
+.resultSubImg {
+    width: 40%;
+    margin: 4%;
+    border-radius: 50%;
+    position: absolute;
+    right: -10px;
+    bottom: 40px;
+    z-index: 19999;
+    border: 10px solid var(--main-bg-color);
+}
+
+#top4Container .resultSubImg {
+    bottom: 30px;
+}
+
+#top8Container .resultSubImg {
+    bottom: 20px;
+}
+	
+	#outerContainer {
+		width: 100%;
+		max-width: unset;
+		margin: unset;
+		padding: 35px;
+	}
+	
+	#winnerContainer > .resultCard {
+		margin-left: 50px;
+		margin-top: 50px;
+	}
+
+	#top4Container > .resultCard {
+		width:340px;
+		height:340px;
+	}
+	
+	#top8Container > .resultCard {
+		width:250px;
+		height:250px;
+	}
+</style>
+
+<script>
+
+
+	function TemplateEngine(template, options) {
+		
+		let re = /<%([^%>]+)?%>/g, reExp = /(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g, code = 'var r=[];\n', cursor = 0, match;
+		let add = function(line, js) {
+			js? (code += line.match(reExp) ? line + '\n' : 'r.push(' + line + ');\n') :
+				(code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
+			return add;
+		}
+		while(match = re.exec(template)) {
+			add(template.slice(cursor, match.index))(match[1], true);
+			cursor = match.index + match[0].length;
+		}
+		add(template.substr(cursor, template.length - cursor));
+		code += 'return r.join("");';
+		return new Function(code.replace(/[\r\t\n]/g, '')).apply(options);
+	}
+	
+	function generateResultCard(result){
+		return TemplateEngine(resultCard,result)
+	}
+	
+	const resultCard = `<div class="resultCard">
+		<span class="resultPlacing"><%this.placing%></span>
+		<img class="resultImg" src="https://www.duelingbook.com/images/low-res/<%this.cardId%>.jpg"/>
+		<%if(this.subCardId){%>
+		<div class="resultSubImgBefore"></div>
+		<img class="resultSubImg" src="https://www.duelingbook.com/images/low-res/<%this.subCardId%>.jpg"/>
+		
+		<%}%>
+		<span class="resultName"><span class="resultNameInner"><%this.name%></span></span>
+	
+	</div>`;
+	
+	window.onload = function(){
+	
+		document.getElementById("winnerContainer").innerHTML = generateResultCard(results[0]);
+		
+		document.getElementById("top4Container").innerHTML = results.slice(1,4).map(generateResultCard).join("");
+		
+		document.getElementById("top8Container").innerHTML = results.slice(4,8).map(generateResultCard).join("");
+		
+		
+	}
+	
+</script>
+
+<div class="container row" id="outerContainer">
+
+	<div class="col-4" id="winnerContainer">
+		
+	</div>
+	
+	<div class="col-8 container">
+		<div class="row" id="top4Container">
+		
+		</div>
+		
+		<div class="row" id="top8Container">
+		
+		</div>
+		
+	</div>
+
+</div>
