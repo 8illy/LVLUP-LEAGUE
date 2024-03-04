@@ -3,7 +3,7 @@
 	var results = [];
 	
 	if(window.location.hash) {
-		let array = window.location.hash.split("|").map(decodeURIComponent);
+		let array = decodeURIComponent(window.location.hash).substr(1).split("|");
 		let chunkSize = 11;
 		for (let i = 0; i < array.length; i += chunkSize) {
 			let chunk = array.slice(i, i + chunkSize);
