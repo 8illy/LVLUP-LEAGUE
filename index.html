@@ -5,7 +5,11 @@
 	if(window.location.hash) {
 		let array = decodeURIComponent(window.location.hash).substr(1).split("|");
 		let chunkSize = 11;
-		for (let i = 0; i < array.length; i += chunkSize) {
+		
+		let topPlayers = 8;
+		
+		let i = 0;
+		for (i = 0; i < (topPlayers * chunkSize); i += chunkSize) {
 			let chunk = array.slice(i, i + chunkSize);
 			results.push({
 				cardId : chunk[9],
@@ -13,7 +17,13 @@
 				name : chunk[1],
 			})
 		}
-	
+		
+		document.body.style = `
+			--background-image-url : url(${array[i+1]});
+			--main-bg-color : ${array[i+2]};
+			--main-tx-color : ${array[i+3]};
+		`
+		
 	}
 	
 	results = results.map(function(e,i,a){e.placing = i+1;return e});
@@ -38,6 +48,11 @@
 		background:url(https://i.redd.it/r7u6tphn55281.png);
 		background:url(https://unblast.com/wp-content/uploads/2021/01/Space-Background-Images.jpg);
 		/*background:url(https://mrwallpaper.com/images/hd/wallpaper-valentines-day-hearts-lots-fly-love-m7tt0svylhvxbrvn.jpg);*/
+		
+		background:var(--background-image-url);
+		
+		background-size: cover;
+		background-position: center;
 	}
 
 	.resultCard {
