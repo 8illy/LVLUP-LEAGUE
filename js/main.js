@@ -53,9 +53,9 @@
 			}
 			
 			document.body.style = `
-				--background-image-url : url(${array[i+1]});
-				--main-bg-color : ${array[i+2]};
-				--main-tx-color : ${array[i+3]};
+				--background-image-url : url(${array[i]});
+				--main-bg-color : ${array[i+1]};
+				--main-tx-color : ${array[i+2]};
 			`
 			
 		}
