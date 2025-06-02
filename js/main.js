@@ -20,12 +20,23 @@
 		return TemplateEngine(resultCard,result)
 	}
 	
+	function getCardUrl(cards,cardImg){
+		try{
+			let u = new URL(cardImg);
+			return cardImg
+		}catch(err){
+			let cardId = cards.find((e)=>{return e.n==cardImg;})?.id;
+			cardId = cardId ? cardId : 3433;
+			return `https://www.duelingbook.com/images/low-res/${cardId}.jpg`;
+		}
+	}
+	
 	const resultCard = `<div class="resultCard">
 		<span class="resultPlacing"><%this.placing%></span>
-		<img class="resultImg" src="https://www.duelingbook.com/images/low-res/<%this.cardId%>.jpg"/>
-		<%if(this.subCardId){%>
+		<img class="resultImg" src="<%this.cardUrl%>"/>
+		<%if(this.subCardUrl){%>
 		<div class="resultSubImgBefore"></div>
-		<img class="resultSubImg" src="https://www.duelingbook.com/images/low-res/<%this.subCardId%>.jpg"/>
+		<img class="resultSubImg" src="<%this.subCardUrl%>"/>
 		
 		<%}%>
 		<span class="resultName"><span class="resultNameInner"><%this.name%></span></span>
@@ -69,11 +80,10 @@
 				let cards = JSON.parse(x.responseText).cards
 			
 				for(let i in results){
-					results[i].cardId = cards.find((e)=>{return e.n==results[i].cardId;})?.id;
-					results[i].subCardId = cards.find((e)=>{return e.n==results[i].subCardId;})?.id;
 					
-					results[i].cardId = results[i].cardId ? results[i].cardId : 3433;
-					results[i].subCardId = results[i].subCardId ? results[i].subCardId : 3433;
+					results[i].cardUrl = getCardUrl(cards,results[i].cardId);
+					results[i].subCardUrl = getCardUrl(cards,results[i].subCardId);
+
 				}
 			
 				document.getElementById("winnerContainer").innerHTML = generateResultCard(results[0]);
